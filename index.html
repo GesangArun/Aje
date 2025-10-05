@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Ajeee 🎉</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      overflow-x: hidden;
+    }
+    h1 {
+      font-size: 3rem;
+      color: #fff;
+      margin-top: 50px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+      animation: fadeInDown 2s ease;
+    }
+    h2 {
+      font-size: 1.5rem;
+      color: #fff;
+      margin-top: 10px;
+      animation: fadeInUp 3s ease;
+    }
+    .flower {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-image: url('https://i.ibb.co/5xY0bQy/flower.png');
+      background-size: cover;
+      animation: float 10s infinite;
+    }
+    @keyframes float {
+      0% {transform: translateY(0);}
+      50% {transform: translateY(-50px);}
+      100% {transform: translateY(0);}
+    }
+    @keyframes fadeInDown {
+      from {opacity: 0; transform: translateY(-30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    .message {
+      margin: 30px auto;
+      max-width: 600px;
+      font-size: 1.2rem;
+      color: #fff;
+      background: rgba(255,255,255,0.2);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+      animation: fadeInUp 4s ease;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #ff6f91;
+      border: none;
+      color: white;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #ff9671;
+      transform: scale(1.05);
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌸 Happy Birthday, Ajeee! 🌸</h1>
+  <h2>Hari ini adalah hari spesialmu 🎂</h2>
+
+  <div class="message">
+    Selamat ulang tahun Ajeee 🎉💖<br><br>
+    Semoga semua mimpi indahmu bisa terwujud satu per satu.  
+    Kamu seperti bunga yang selalu mekar, memberi warna dan keindahan pada semua orang di sekitarmu 🌸✨  
+    Teruslah bersinar dan menjadi versi terbaik dari dirimu.  
+    <br><br>
+    Dari sahabatmu dengan penuh kasih 💕
+  </div>
+
+  <button onclick="showConfetti()">Klik untuk kejutan 🎊</button>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    // Generate random floating flowers
+    for (let i = 0; i < 8; i++) {
+      let flower = document.createElement("div");
+      flower.className = "flower";
+      flower.style.left = Math.random() * window.innerWidth + "px";
+      flower.style.top = Math.random() * window.innerHeight + "px";
+      document.body.appendChild(flower);
+    }
+
+    // Confetti Effect
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let confetti = [];
+
+    function randomColor() {
+      const colors = ["#ff6f91", "#ff9671", "#ffc75f", "#f9f871", "#c4fcef"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createConfetti() {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 100,
+        color: randomColor(),
+        tilt: Math.random() * 10 - 10,
+        tiltAngleIncrement: Math.random() * 0.07 + 0.05,
+        tiltAngle: 0
+      };
+    }
+
+    function drawConfetti(c) {
+      ctx.beginPath();
+      ctx.lineWidth = c.r / 2;
+      ctx.strokeStyle = c.color;
+      ctx.moveTo(c.x + c.tilt + c.r / 4, c.y);
+      ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 4);
+      ctx.stroke();
+    }
+
+    function updateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach((c, i) => {
+        c.tiltAngle += c.tiltAngleIncrement;
+        c.y += (Math.cos(c.d) + 3 + c.r / 2) / 2;
+        c.x += Math.sin(c.d);
+        c.tilt = Math.sin(c.tiltAngle) * 15;
+
+        if (c.y > canvas.height) {
+          confetti[i] = createConfetti();
+          confetti[i].y = -10;
+        }
+        drawConfetti(c);
+      });
+      requestAnimationFrame(updateConfetti);
+    }
+
+    function showConfetti() {
+      confetti = [];
+      for (let i = 0; i < 200; i++) confetti.push(createConfetti());
+      updateConfetti();
+    }
+  </script>
+</body>
+</html>
